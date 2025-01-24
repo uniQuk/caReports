@@ -1,0 +1,82 @@
+{
+  "appMappings": {
+    "Office365": "O365",
+    "Exchange": "EXO",
+    "SharePoint": "SPO",
+    "MicrosoftTeams": "Teams",
+    "MicrosoftAdminPortals": "AdminPortals",
+    "00000002-0000-0ff1-ce00-000000000000": "O365",
+    "00000003-0000-0ff1-ce00-000000000000": "SPO",
+    "00000003-0000-0000-c000-000000000000": "Teams",
+    "a0c73c16-a7e3-4564-9a95-2bdf47383716": "EXO"
+  },
+  "personaNumbers": {
+    "Global": "CA001",
+    "Admins": "CA100",
+    "Internals": "CA200",
+    "GuestUsers": "CA400"
+  },
+  "simpleSequence": {
+    "admin": "CA10",
+    "device": "CA20",
+    "default": "CA01",
+    "emergency": "EM01"
+  },
+  "asdTypes": {
+    "admin": "ADM",
+    "device": "DEV",
+    "guest": "GST",
+    "location": "LOC",
+    "default": "USR"
+  },
+  "controls": {
+    "block": {
+      "simple": "Block",
+      "asd": "B"
+    },
+    "mfa": {
+      "simple": "RequireMFA",
+      "asd": "G"
+    },
+    "compliantDevice": {
+      "simple": "RequireCompliant",
+      "asd": "G"
+    },
+    "session": {
+      "simple": "AllowSession",
+      "asd": "S"
+    }
+  },
+  "asdPurposes": {
+    "admin": {
+      "session": "Limit admin sessions",
+      "mfa": "Admin access with strong auth",
+      "compliantDevice": "Admin access from compliant devices",
+      "block": "Block unauthorized admin access"
+    },
+    "device": {
+      "block": "Block access from unapproved devices",
+      "compliantDevice": "Compliant devices",
+      "mfa": "Device access with strong auth"
+    },
+    "guest": {
+      "block": "Block guests",
+      "mfa": "Guest access with strong auth",
+      "compliantDevice": "Guest access from compliant devices"
+    },
+    "user": {
+      "block": {
+        "legacy": "Block access via legacy auth",
+        "risk": "Block high-risk sign-ins",
+        "default": "Block unauthorized access"
+      },
+      "mfa": "Require strong auth",
+      "session": "Limit user sessions",
+      "compliantDevice": "Require compliant devices"
+    },
+    "location": {
+      "block": "Block access from unapproved countries",
+      "mfa": "Location access with strong auth"
+    }
+  }
+}
