@@ -37,16 +37,18 @@ cagaps/
 ├── scripts/
 │   ├── 01-fetch_ca_policies_dev.ps1
 │   ├── 01-fetch_ca_policies_prod.ps1
-│   ├── 02-generate_policy_diagrams_data.ps1
-│   ├── 02-generate_policy_diagrams_original.ps1
+│   ├── 02-generate_diagrams_data.ps1
+│   ├── 02-generate_diagrams_original.ps1
 │   ├── 03-analyze_policies.ps1
 │   └── 04-ca-naming.ps1
 ├── config/
 │   └── naming-rules.json
+├── diagrams/
+│   ├── original/    # Generated policy diagrams
+│   ├── data/        # Generated policy diagrams
 ├── policies/
 │   ├── original/    # Original policy JSON files
 │   ├── data/        # Enhanced policy JSON files
-│   └── diagrams/    # Generated policy diagrams
 └── analysis/
     └── markdown/    # Analysis reports and documentation
 ```
@@ -82,14 +84,16 @@ cagaps/
   - Grant controls
 - Saves diagrams as Markdown files for easy viewing
 
-#### `02-generate_policy_diagrams_og.ps1` (Original)
+#### `02-generate_diagrams_original.ps1` (Original folder)
 - This uses the raw unmodified .json files in /policies/original
+- Uses guid's instead of friendly names
 - Original version of the diagram generator
 - Includes simpler diagrams
 - Useful for detailed technical documentation
 
-#### `02-generate_policy_diagrams.ps1` (Data)
+#### `02-generate_policy_diagrams.ps1` (Data folder)
 - This uses the enhanced .json files in /policies/data
+- Generates friendly names (or numbers in groups dependent on which fetch script is ran)
 - Groups directory roles, groups, users into larger boxes to help visualise large inclusions/exclusions
 - Includes more detailed but potentially more complex diagrams
 - Useful for detailed technical documentation
