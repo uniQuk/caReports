@@ -151,7 +151,8 @@ Connect-MgGraph -Scopes "Policy.Read.All", "Directory.Read.All"
 
 - `policies/original/*.json`: Raw policy exports
 - `policies/data/*.json`: Enhanced policies with resolved names
-- `policies/diagrams/*.md`: Mermaid diagrams for each policy
+- `diagrams/original/*.md`: Mermaid diagrams for each policy
+- `diagrams/data/*.md`: Mermaid diagrams for each policy
 - `analysis/markdown/policy_analysis.md`: Comprehensive analysis report
 - `analysis/markdown/naming_conventions.md`: Naming convention analysis
 
