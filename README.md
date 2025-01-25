@@ -56,19 +56,46 @@ cagaps/
 ## Scripts Overview
 
 ### 1. Policy Fetching Scripts
+- Both scripts parse friendly names from GUID's for Roles, Groups, Applications etc
+- Stores verbose .json and creates enhanced JSON files with resolved names for users, groups, and applications
+- _dev.ps1 also gets all users within any included/excluded groups hence not suitable for large tenants
+- _prod.ps1 stores group member count instead
 
 #### `01-fetch_ca_policies_dev.ps1` (Suitable for small/dev tenants)
-***Note*** Checks member of any groups in the policies - not suitable for large tenants
 - Fetches Conditional Access policies with basic metadata
-- Suitable for environments with fewer policies
-- Creates enhanced JSON files with resolved names for users, groups, and applications
+- Suitable for environments with fewer policies (creates larger .json files)
 - Saves both original and enhanced versions of policies
+- Parses friendly names from guid's and stores all group members:
+```js
+"excludeGroups": {
+        "9876538c-1234-5678-8e1f-12345abcdefg": {
+          "members": {
+            "123abc-12ab-1b1b-a3a3-abcd1234ef5": {
+              "userPrincipalName": "user@domain.com",
+              "displayName": "First Last",
+              "id": "123abc-12ab-1b1b-a3a3-abcd1234ef5"
+            }
+          },
+          "displayName": "Group Name",
+          "id": "9876538c-1234-5678-8e1f-12345abcdefg"
+        }
+      },
+```
 
 #### `01-fetch_ca_policies_prod.ps1` (Suitable for larger tenants)
 - Extended version with additional error handling and group member counting
 - Better suited for large environments
-- Includes performance optimizations for handling many policies
-- Uses batch operations where possible
+- Parses friendly names from guid's stores group member count instead of users:
+```js
+"includeGroups": {
+  "9876538c-1234-5678-8e1f-12345abcdefg": {
+    "displayName": "Group Name",
+    "memberCount": 17,
+    "id": "9876538c-1234-5678-8e1f-12345abcdefg"
+  }
+},
+```
+
 
 ### 2. Policy Visualization Scripts
 ***Note:*** Inspired by the visualiser provided in the [MEMPSToolkit](https://github.com/hcoberdalhoff/MEMPSToolkit)
@@ -85,7 +112,7 @@ cagaps/
 - Saves diagrams as Markdown files for easy viewing
 
 #### `02-generate_diagrams_original.ps1` (Original folder)
-- This uses the raw unmodified .json files in /policies/original
+- This uses the verbose unmodified .json files in /policies/original
 - Uses guid's instead of friendly names
 - Original version of the diagram generator
 - Includes simpler diagrams
@@ -102,7 +129,7 @@ cagaps/
 
 #### `03-analyze_policies.ps1`
 - Performs an analysis of policy configurations
-- Generates comprehensive Markdown reports including:
+- Generates comprehensive Markdown report including:
   - Policy patterns and statistics
   - Temporal analysis (policy changes over time)
   - State distribution
@@ -179,7 +206,7 @@ The `config/naming-rules.json` file contains mappings and rules for:
 ### Standardizing Policy Names
 1. Run the naming convention analysis
 2. Review suggestions in naming_conventions.md
-3. Update policy names in Azure AD based on recommendations
+3. Update policy names in Entra ID based on recommendations
 
 ## Contributing
 
