@@ -158,36 +158,48 @@ function Get-AppScopeEmoji {
         return "📱 User Action: $action"
     }
 
-    # Get counts and names
+    # Get counts and names for included apps
     $includeApps = if ($policy.conditions.applications.includeApplications -is [Array]) {
         @($policy.conditions.applications.includeApplications)
     } else {
         @($policy.conditions.applications.includeApplications.PSObject.Properties)
     }
-    $excludeApps = @($policy.conditions.applications.excludeApplications.PSObject.Properties)
+
+    # Get counts and names for excluded apps - fix counting logic
+    $excludeApps = if ($policy.conditions.applications.excludeApplications) {
+        if ($policy.conditions.applications.excludeApplications -is [Array]) {
+            @($policy.conditions.applications.excludeApplications)
+        } else {
+            @($policy.conditions.applications.excludeApplications.PSObject.Properties)
+        }
+    } else {
+        @()
+    }
     
     # Format the include/exclude display
     if ($includeApps -contains "All") {
         if ($excludeApps.Count -eq 1) {
-            $excludeName = $excludeApps[0].Value.displayName
+            $excludeName = if ($excludeApps[0].Value.displayName) {
+                $excludeApps[0].Value.displayName
+            } else {
+                $excludeApps[0]
+            }
             return "🌐 (All, $excludeName)"
         }
-        if ($excludeApps.Count -gt 0) {
-            return "🌐 (All, $($excludeApps.Count))"
-        }
-        return "🌐 (All, 0)"
+        return "🌐 (All, $($excludeApps.Count))"
     }
     
     # Handle object-style includeApplications
-    if ($includeApps.Count -eq 1 -and $includeApps[0].Value.displayName) {
-        return "🌐 ($($includeApps[0].Value.displayName), $($excludeApps.Count))"
+    if ($includeApps.Count -eq 1) {
+        if ($includeApps[0].Value.displayName) {
+            return "🌐 ($($includeApps[0].Value.displayName), $($excludeApps.Count))"
+        }
+        elseif ($includeApps[0] -and $includeApps[0] -ne "All") {
+            return "🌐 ($($includeApps[0]), $($excludeApps.Count))"
+        }
     }
     
-    if ($includeApps.Count -gt 0) {
-        return "🌐 ($($includeApps.Count), $($excludeApps.Count))"
-    }
-    
-    return "🌐 (0, 0)"
+    return "🌐 ($($includeApps.Count), $($excludeApps.Count))"
 }
 
 function Get-ControlsEmoji {
