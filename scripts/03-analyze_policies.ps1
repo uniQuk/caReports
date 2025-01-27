@@ -490,6 +490,30 @@ function Get-NonEmptyConditions {
     return $conditions
 }
 
+# Add function for cleaning values
+function Get-CleanValue {
+    param(
+        $value,
+        [string]$type = "default"
+    )
+    
+    if ($value -is [array]) {
+        return $value.Count
+    }
+    
+    if ($value.PSObject.Properties) {
+        $count = @($value.PSObject.Properties).Count
+        switch ($type) {
+            "users" { return "$count users" }
+            "roles" { return "$count roles" }
+            "apps" { return "$count applications" }
+            default { return $count }
+        }
+    }
+    
+    return $value
+}
+
 # Modify policy_analysis.md generation to include proper indentation
 function Format-MarkdownSection {
     param($title, $content)
