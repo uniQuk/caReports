@@ -620,7 +620,7 @@ Conditions:
     # Fix formatting in detailed conditions section
     $detailsSection = ($policies | ForEach-Object {
         $conditions = Get-NonEmptyConditions -policy $_
-        $policyDetails = "`n### $($_.displayName)"
+        $policyDetails = "`n### [$($_.displayName)](#policy-overview)"
         foreach ($section in $conditions.Keys) {
             $content = if ($conditions[$section] -is [array]) {
                 ($conditions[$section] | ForEach-Object { "- $_" }) -join "`n"
