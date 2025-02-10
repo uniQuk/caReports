@@ -16,10 +16,11 @@ Added 4 additional optional scripts:
 │   ├── 07-yaml_summary.ps1
 │   └── 08-generate-d3-graph.ps1 (experimental/WIP)
 ```
-05 - Converts the json policies to YAML
-06 - Removes empty values
-07 - Uses the cleaned YAML from 06 to generate a markdown report of all policies
-08 - Experimental script using D3.js to visualise policy relationships. (Work in Progress)
+
+- 05 - Converts the json policies to YAML
+- 06 - Removes empty values for easier viewing
+- 07 - Uses the cleaned YAML from 06 to generate a markdown report of all policies
+- 08 - Experimental script using D3.js to visualise policy relationships. (Work in Progress)
 
 ToDo:
 - Convert to a PowerShell module, update the file structure and simplify the outputs
