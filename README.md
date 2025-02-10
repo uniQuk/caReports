@@ -2,6 +2,30 @@
 
 A collection of PowerShell scripts for analyzing, documenting, and visualising Microsoft Entra ID (Azure AD) Conditional Access policies.
 
+---
+# Update: 10th February 2025
+Added 4 additional optional scripts:
+- Module Dependency:
+  - Install-Module powershell-yaml
+  - Install-Module powershell-yaml -Scope CurrentUser
+  - Import-Module powershell-yaml
+- Require running either of the 01-fetch_ca_policies..ps1
+```
+│   ├── 05-json_to_yaml.ps1
+│   ├── 06-clean_yaml.ps1
+│   ├── 07-yaml_summary.ps1
+│   └── 08-generate-d3-graph.ps1 (experimental/WIP)
+```
+05 - Converts the json policies to YAML
+06 - Removes empty values
+07 - Uses the cleaned YAML from 06 to generate a markdown report of all policies
+08 - Experimental script using D3.js to visualise policy relationships. (Work in Progress)
+
+ToDo:
+- Convert to a PowerShell module, update the file structure and simplify the outputs
+---
+
+
 ## ⚠️ Disclaimer
 
 These scripts are provided "AS IS" without warranty of any kind. This is a personal project and is not officially supported by Microsoft. Before using in a production environment:
