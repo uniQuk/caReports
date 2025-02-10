@@ -237,11 +237,13 @@ Get-ChildItem -Path $originalPath -Filter "*.json" | ForEach-Object {
         $lines += "    conditions --> insiderRisk[""Insider Risk Levels:<br/>• $insiderRisks""]"
     }
 
-    # Devices
+    # Device Platforms
     if ($policy.conditions.devices) {
         $lines += "    conditions --> devices"
         if ($policy.conditions.devices.deviceFilter) {
-            $lines += "    devices --> deviceFilter[""Device Filter: $($policy.conditions.devices.deviceFilter.mode)<br/>Rule: $($policy.conditions.devices.deviceFilter.rule)""]"
+            # Escape internal quotes by using single quotes or escaped double quotes
+            $rule = $policy.conditions.devices.deviceFilter.rule.Replace('"', '\\"')
+            $lines += "    devices --> deviceFilter[""Device Filter: $($policy.conditions.devices.deviceFilter.mode)<br/>Rule: $rule""]"
         }
     }
 

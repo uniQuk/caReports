@@ -40,7 +40,11 @@ cagaps/
 │   ├── 02-generate_diagrams_data.ps1
 │   ├── 02-generate_diagrams_original.ps1
 │   ├── 03-analyze_policies.ps1
-│   └── 04-ca-naming.ps1
+│   ├── 04-ca-naming.ps1
+│   ├── 05-json_to_yaml.ps1
+│   ├── 06-clean_yaml.ps1
+│   ├── 07-yaml_summary.ps1
+│   └── 08-generate-d3-graph.ps1
 ├── config/
 │   └── naming-rules.json
 ├── diagrams/
@@ -151,6 +155,44 @@ cagaps/
     - Ref: [ASD's Blueprint for Secure Cloud](https://blueprint.asd.gov.au/design/platform/identity/conditional-access/)
 - Uses configuration from `config/naming-rules.json`
 
+### 5. JSON to YAML Conversion Script
+
+#### `05-json_to_yaml.ps1`
+Converts JSON policy files to YAML format for better readability and analysis.
+
+Features:
+- Generates safe filenames using MD5 hashing
+- Creates a manifest file mapping short names to original policy names
+- Preserves original policy structure while making it more readable
+- Handles special characters and long filenames safely
+
+### 6. YAML Cleaning Script
+
+#### `06-clean_yaml.ps1`
+Cleans and normalizes YAML policy files for consistent analysis.
+
+Features:
+- Removes empty values, arrays, and objects
+- Standardizes property ordering (displayName, state, dates, etc.)
+- Preserves essential policy structure
+- Makes files more consistent for comparison and analysis
+
+### 7. YAML Summary Script
+
+#### `07-yaml_summary.ps1`
+Generates a comprehensive markdown summary of all policies.
+
+Features:
+- Creates a table of contents for all policies
+- Shows detailed information for each policy
+- Highlights relationships between policies
+- Includes state indicators (enabled, disabled, report-only)
+
+### 8. D3 Graph Generation Script
+
+#### `08-generate-d3-graph.ps1`
+Creates an interactive visualization of policy relationships (experimental).
+
 ## Usage
 
 1. Start by fetching policies:
@@ -174,6 +216,26 @@ Connect-MgGraph -Scopes "Policy.Read.All", "Directory.Read.All"
 ./scripts/04-ca-naming.ps1
 ```
 
+5. Convert JSON to YAML:
+```powershell
+./scripts/05-json_to_yaml.ps1
+```
+
+6. Clean YAML files:
+```powershell
+./scripts/06-clean_yaml.ps1
+```
+
+7. Generate YAML summary:
+```powershell
+./scripts/07-yaml_summary.ps1
+```
+
+8. Generate D3 graph:
+```powershell
+./scripts/08-generate-d3-graph.ps1
+```
+
 ## Output Files
 
 - `policies/original/*.json`: Raw policy exports
@@ -182,6 +244,10 @@ Connect-MgGraph -Scopes "Policy.Read.All", "Directory.Read.All"
 - `diagrams/data/*.md`: Mermaid diagrams for each policy
 - `analysis/markdown/policy_analysis.md`: Comprehensive analysis report
 - `analysis/markdown/naming_conventions.md`: Naming convention analysis
+- `policies/yaml/*.yaml`: YAML converted policy files
+- `policies/yaml/cleaned/*.yaml`: Cleaned YAML policy files
+- `analysis/markdown/yaml_summary.md`: YAML summary report
+- `diagrams/d3/*.html`: D3 interactive graph visualizations
 
 ## Configuration
 
