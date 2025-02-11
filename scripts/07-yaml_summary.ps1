@@ -79,21 +79,20 @@ function Format-PropertyDetails {
 }
 
 function Get-PolicyDetails {
-    param($policy, $fileName)
+    param($policy)
     
-    $details = @"
-### $($policy.displayName)
-[🔼 Back to top](#table-of-contents)
-
-- **File**: $fileName _(Original: $($policy.displayName))_
-- **State**: $($policy.state)
-- **Created**: $(Format-DateTime $policy.createdDateTime)
-- **Modified**: $(if ($policy.modifiedDateTime) { Format-DateTime $policy.modifiedDateTime } else { "Never" })
-- **ID**: $($policy.id)
-"@
+    $details = "### $($policy.displayName)`n"
+    $details += "[🔼 Back to top](#table-of-contents)`n`n"
+    
+    # Add basic information
+    $details += "- **File**: $($policy.SourceFile) _(Original: $($policy.displayName))_`n"
+    $details += "- **State**: $($policy.state)`n"
+    $details += "- **Created**: $(Format-DateTime $policy.createdDateTime)`n"
+    $details += "- **Modified**: $(if ($policy.modifiedDateTime) { Format-DateTime $policy.modifiedDateTime } else { 'Never' })`n"
+    $details += "- **ID**: $($policy.id)`n"
 
     # Process all policy properties except basic info
-    $excludeProperties = @('displayName', 'state', 'createdDateTime', 'modifiedDateTime', 'id', 'Keys', 'Values', 'Count')
+    $excludeProperties = @('displayName', 'state', 'createdDateTime', 'modifiedDateTime', 'id', 'Keys', 'Values', 'Count', 'SourceFile')
     
     foreach ($prop in $policy.PSObject.Properties) {
         if ($prop.Name -notin $excludeProperties -and $null -ne $prop.Value) {
@@ -113,6 +112,8 @@ $policies = @()
 Get-ChildItem -Path $cleanPath -Filter "*.yaml" | ForEach-Object {
     $yamlContent = Get-Content $_.FullName -Raw
     $policy = ConvertFrom-Yaml $yamlContent
+    # Add filename as a property to the policy object
+    $policy | Add-Member -NotePropertyName "SourceFile" -NotePropertyValue $_.Name -Force
     $policies += $policy
 }
 
@@ -126,14 +127,9 @@ foreach ($policy in $policies) {
 }
 
 # Generate main documentation
-$documentation = @"
-# Conditional Access Policies
-
-$toc
-
-# Detailed Policy Documentation
-
-"@
+$documentation = "# Conditional Access Policies`n`n"
+$documentation += $toc
+$documentation += "`n# Detailed Policy Documentation`n"
 
 foreach ($policy in $policies) {
     $documentation += "`n$(Get-PolicyDetails $policy)"
