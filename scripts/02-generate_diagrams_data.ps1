@@ -50,13 +50,37 @@ function Get-RolesText {
 
 function Get-UsersText {
     param($users, $type)
-    # $script:functionCalls[$MyInvocation.MyCommand.Name]++
-    if (-not $users -or -not $users.PSObject.Properties) { return "" }
+    if (-not $users) { return "" }
     
     $names = @()
-    foreach ($user in $users.PSObject.Properties) {
-        if ($user.Value.displayName) {
-            $names += $user.Value.displayName
+    
+    # Handle the case where users is an array containing "All"
+    if ($users -is [Array] -and $users -contains "All") {
+        return "All Users"
+    }
+    
+    # Handle the case where users is a hashtable/dictionary format
+    if ($users -is [System.Collections.IDictionary]) {
+        foreach ($user in $users.Values) {
+            if ($user.displayName) {
+                $names += $user.displayName
+            }
+        }
+    }
+    # Handle the case where users is an array of IDs
+    elseif ($users -is [Array]) {
+        foreach ($userId in $users) {
+            if ($userId -ne "All") {
+                $names += $userId
+            }
+        }
+    }
+    # Handle the case where users has properties
+    elseif ($users.PSObject.Properties) {
+        foreach ($user in $users.PSObject.Properties) {
+            if ($user.Value.displayName) {
+                $names += $user.Value.displayName
+            }
         }
     }
     
@@ -152,16 +176,19 @@ Get-ChildItem -Path $originalPath -Filter "*.json" | ForEach-Object {
     if ($policy.conditions.users) {
         $lines += "    conditions --> users"
         
-        # Handle All Users case
-        if ($policy.conditions.users.includeUsers -eq "All") {
+        if ($policy.conditions.users.includeUsers -contains "All") {
             $lines += "    users --> all_users[""All Users""]"
         } else {
-            # Include/Exclude Users as combined nodes
             $includeUsersText = Get-UsersText -users $policy.conditions.users.includeUsers -type "Include"
-            $excludeUsersText = Get-UsersText -users $policy.conditions.users.excludeUsers -type "Exclude"
-            
-            if ($includeUsersText) { $lines += "    users --> users_include[""$includeUsersText""]" }
-            if ($excludeUsersText) { $lines += "    users --> users_exclude[""$excludeUsersText""]" }
+            if ($includeUsersText) { 
+                $lines += "    users --> users_include[""$includeUsersText""]" 
+            }
+        }
+
+        # Always check for excluded users
+        $excludeUsersText = Get-UsersText -users $policy.conditions.users.excludeUsers -type "Exclude"
+        if ($excludeUsersText) { 
+            $lines += "    users --> users_exclude[""$excludeUsersText""]" 
         }
 
         # Groups as combined nodes
