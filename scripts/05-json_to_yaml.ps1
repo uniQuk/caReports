@@ -4,7 +4,7 @@
 
 $basePath = Split-Path -Path $PSScriptRoot -Parent
 $originalPath = Join-Path $basePath "policies/data"
-$yamlPath = Join-Path $basePath "policies/yaml"
+$yamlPath = Join-Path $basePath "policies/yaml/complete"
 
 # Ensure we have write permissions and create directory
 $null = New-Item -ItemType Directory -Force -Path $yamlPath
