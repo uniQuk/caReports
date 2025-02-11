@@ -422,6 +422,12 @@ function Get-NonEmptyConditions {
     if ($policy.conditions.users.excludeUsers.PSObject.Properties.Count -gt 0) {
         $userConfig['Exclude Users'] = Get-CleanValue $policy.conditions.users.excludeUsers "users"
     }
+    if ($policy.conditions.users.includeGroups.PSObject.Properties.Count -gt 0) {
+        $userConfig['Include Groups'] = Get-CleanValue $policy.conditions.users.includeGroups "groups"
+    }
+    if ($policy.conditions.users.excludeGroups.PSObject.Properties.Count -gt 0) {
+        $userConfig['Exclude Groups'] = Get-CleanValue $policy.conditions.users.excludeGroups "groups"
+    }
     if ($policy.conditions.users.includeRoles.PSObject.Properties.Count -gt 0) {
         $userConfig['Include Roles'] = Get-CleanValue $policy.conditions.users.includeRoles "roles"
     }
@@ -517,6 +523,7 @@ function Get-CleanValue {
         $count = @($value.PSObject.Properties).Count
         switch ($type) {
             "users" { return "$count users" }
+            "groups" { return "$count groups" }
             "roles" { return "$count roles" }
             "apps" { return "$count applications" }
             default { return $count }
