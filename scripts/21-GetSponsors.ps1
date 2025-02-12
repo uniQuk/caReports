@@ -10,8 +10,8 @@ foreach ($guest in $guests) {
         $sponsors = Invoke-MgGraphRequest -Method GET -Uri "https://graph.microsoft.com/v1.0/users/$($guest.Id)/sponsors"
         
         # Get sponsor details for each sponsor ID
-        $sponsorDetails = foreach ($sponsorId in $sponsors.value) {
-            $sponsorUser = Get-MgUser -UserId $sponsorId
+        $sponsorDetails = foreach ($sponsorInfo in $sponsors.value) {
+            $sponsorUser = Get-MgUser -UserId $sponsorInfo.id
             $sponsorUser.DisplayName
         }
 
@@ -22,7 +22,7 @@ foreach ($guest in $guests) {
             GuestId = $guest.Id
             SponsorCount = ($sponsors.value).Count
             Sponsors = ($sponsorDetails -join '; ')
-            SponsorIds = ($sponsors.value -join '; ')
+            SponsorIds = ($sponsors.value.id -join '; ')
         }
 
         Write-Host "Processed guest: $($guest.DisplayName)"
