@@ -1,7 +1,9 @@
 # Required module: ImportExcel
 
-$policiesPath = "/Volumes/Kingston2TB/Dev/cagaps/policies/data"
-$outputPath = "/Volumes/Kingston2TB/Dev/cagaps/analysis/excel"
+# Create directories if they don't exist
+$basePath = Split-Path -Path $PSScriptRoot -Parent
+$policiesPath = Join-Path $basePath "policies/data"
+$outputPath = = Join-Path $basePath "analysis/excel"
 $excelFile = Join-Path $outputPath "CA_Policies_Analysis.xlsx"
 
 # Create output directory if it doesn't exist
