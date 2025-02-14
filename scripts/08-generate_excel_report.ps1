@@ -3,7 +3,7 @@
 # Create directories if they don't exist
 $basePath = Split-Path -Path $PSScriptRoot -Parent
 $policiesPath = Join-Path $basePath "policies/data"
-$outputPath = = Join-Path $basePath "analysis/excel"
+$outputPath = Join-Path $basePath "analysis/excel"
 $excelFile = Join-Path $outputPath "CA_Policies_Analysis.xlsx"
 
 # Create output directory if it doesn't exist
